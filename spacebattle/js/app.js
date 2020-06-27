@@ -3,6 +3,8 @@
 // NOTE  
 //~  Alien Race: Xatteol
 
+/*  gameWhile = playGame(startGame) */
+
 
 //? ────────────────────────────────────────────────────────────────────────────────
 
@@ -16,7 +18,10 @@ console.log("working")
 class Ship {
     scoutIndex = 0;
 
-
+    //
+    //? ─── FIGHT FUNCTION ─────────────────────────────────────────────────────────────
+    //
+    //? ────────────────────────────────────────────────────────────────────────────────
 
     fight() {
         // let PS_hull = this.playerShipStats.hull 
@@ -61,7 +66,17 @@ class Ship {
 
             }
         }
+        return loopEnd;
     }
+
+
+
+
+    //
+    //? ─── CHECK HEALTH FUNCTION ────────────────────────────────────────────────────────
+    //
+    //? ────────────────────────────────────────────────────────────────────────────────
+
 
     checkHealth() {
 
@@ -73,28 +88,44 @@ class Ship {
         //~If player ship destroyed ends the loop
         if (currPSStats.hull <= 0) {
             console.log(`${currPSStats.name} health is 0, ${currPSStats.name} ship is destroyed`)
-            return 1
+            return 2
         }
         return 0;
     }
 
+
+
+    //
+    //? ─── START FIGHT FUNCTION ────────────────────────────────────────────────────────
+    //
+    //? ────────────────────────────────────────────────────────────────────────────────
+
     startFight() {
         // let alienShipObj = new AlienShip()
         // console.log(alienShipObj.scoutShipObjArray[this.scoutInd]) 
+        player.ussSchwarzenegger()
         globalAlienObj.setAlienShipStats(globalAlienObj.scoutShipObjArray[this.scoutIndex])
-        
+
         // alienShipObj.setAlienShipStats(tempObj)
         establishCurrentStats()
         this.scoutIndex++
-        this.fight()
+        // this.fight()
+        return this.fight()
 
         //! return alien object
     }
+
+    //
+    //? ─── CONTINUE FIGHT FUNCTION ──────────────────────────────────────────────────────────────
+    //
+    //? ────────────────────────────────────────────────────────────────────────────────
+
     continueFight() { //! place the function in continue then use the object to call another alien
         globalAlienObj.setAlienShipStats(globalAlienObj.scoutShipObjArray[this.scoutIndex])
         establishCurrentALienStats()
         this.scoutIndex++
         this.fight()
+        return this.fight()
     }
     // xatteoScout() {
     //     this.alienShipStats = {
@@ -106,25 +137,98 @@ class Ship {
     //     }
 
     // }
+    //
+
+    //? ───FIXME RETREAT FUNCTION ──────────────────────────────────────────────────────────────
+    //
+    //? ────────────────────────────────────────────────────────────────────────────────
+
+    retreat(outcomeVal) {
+        if (outcomeVal = 1) {
+            if (this.scoutIndex == 5) {
+                console.log("Feet destroyed, you win")
+                return 0
+            }
+            // TODO let userResponse = prompt("retreat (Y/N)? ")
+            let userResponse = "no"
+            // NOTE verification, so only correct input entered
+            if ((userResponse.toUpperCase() == "YES") || (userResponse.toUpperCase() == "Y")) {
+                    
+                console.log(`\n${player.name} retreats\n`)
+                return 1;
+            } else if ((userResponse.toUpperCase() == "NO") || (userResponse.toUpperCase() == "N")) {
+                this.retreat(this.continueFight())
+            }
+        } else if (outcomeVal = 2) {
+            console.log(`GAME OVER ${player.name}/n ship destroyed, you lose.`)
+            return 2;
+        }
+    }
+
+    //? ───FIXME PLAY AGAIN FUNCTION ──────────────────────────────────────────────────────────────
+    //
+    //? ────────────────────────────────────────────────────────────────────────────────
+
+    playAgain() {
+        // TODO let userResponse = prompt("Play again (Y/N)? ")
+        let userResponse = "no"
+        if ((userResponse.toUpperCase() == "YES") || (userResponse.toUpperCase == "Y")) {
+            globalAlienObj.scoutIndex = 0
+            return 1;
+        } else {
+            return 0
+        }
+    }
+
+    //? ───FIXME RUNGAME FUCTION ──────────────────────────────────────────────────────────────
+    //
+    //? ────────────────────────────────────────────────────────────────────────────────
+
+    runGame() {
+        while (true) {
+            let gameOutcomeVal = this.retreat(this.startFight())
+            if (this.playAgain() != 1) {
+                break
+            }
+        }
+
+    }
+
+
+
+
 
 
 
     //* ───SECTION RANDOM METHODS ─────────────────────────────────────────────────────────────
     // ~need to create methods to randomize hull,firepower, barrier, and accuracy
 
+    //
+    //? ─── RANDOM RANGE NUMBER FUNCTION ──────────────────────────────────────────────────────────────
+    //
+    //? ────────────────────────────────────────────────────────────────────────────────
+
     randRangeNum(max, min) {
         let randVal = Math.floor(Math.random() * ((max - min) + 1))
         return randVal + min
     }
 
+
+
+    //? ─── RANDOM RANGE DOUBLE  FUNCTION ──────────────────────────────────────────────────────────────
+    //
+    //? ────────────────────────────────────────────────────────────────────────────────
     randRangeDouble(max, min) {
         let randVal = (Math.random() * ((max - min))).toFixed(2)
         return +randVal + min
     }
-    //? ────────────────────────────────────────────────────────────────────────────────
+
+
+    //* !SECTION ────────────────────────────────────────────────────────────────────────────────
 
 }
-//? ────────────────────────────────────────────────────────────────────────────────
+
+//* !SECTION ────────────────────────────────────────────────────────────────────────────────
 
 
 
@@ -157,10 +261,10 @@ class PlayerShip extends Ship {
     }
 
 }
-//? ────────────────────────────────────────────────────────────────────────────────
+//* !SECTION ────────────────────────────────────────────────────────────────────────────────
 
 //
-//* ───SECTION ALIEN SHIP METHODS ─────────────────────────────────────────────────────────
+//* ─── SECTION ALIEN SHIP METHODS ─────────────────────────────────────────────────────────
 //
 
 //! Create a player ship (health (hull),damage (firepower), Barrier (barrier), & Accuracy (accuracy))
@@ -258,7 +362,7 @@ class AlienShip extends Ship {
     ]
 
     setAlienShipStats(obj) {
-        alienShipStats = obj 
+        alienShipStats = obj
     }
     getAlienShipHull() {
         return this.alienShipStats.health
@@ -277,7 +381,7 @@ class AlienShip extends Ship {
 
 }
 
-//? ────────────────────────────────────────────────────────────────────────────────
+//* !SECTION ────────────────────────────────────────────────────────────────────────────────
 
 
 //
@@ -293,7 +397,8 @@ let currPSStats = {}
 let currASStats = {}
 let globalAlienObj = new AlienShip();
 let player = new PlayerShip("Wiley")
-//? ────────────────────────────────────────────────────────────────────────────────
+
+//* !SECTION ────────────────────────────────────────────────────────────────────────────────
 
 
 //
@@ -320,14 +425,16 @@ let gameStart = () => {
 
 
 }
-//? ────────────────────────────────────────────────────────────────────────────────
+//* !SECTION ────────────────────────────────────────────────────────────────────────────────
 
 
 
 //* ───SECTION FUNCTION CALLS ─────────────────────────────────────────────────────────────
 //
 //let player = new PlayerShip("Wiley")
-player.ussSchwarzenegger()
+// player.ussSchwarzenegger()
+
+globalAlienObj.runGame()
 
 // let alienShipObj = new AlienShip("rathaus")
 // alienShipObj.xatteoScout()
@@ -341,12 +448,12 @@ player.ussSchwarzenegger()
 // establishCurrentStats()
 // alienShipObj.fight()
 // alienShipObj.startFight()
-player.startFight() // 1
-player.continueFight() // 2 
-player.continueFight() // 3
-player.continueFight() // 4
-player.continueFight() // 5
-player.continueFight() // 6
+// player.startFight() // 1
+// player.continueFight() // 2 
+// player.continueFight() // 3
+// player.continueFight() // 4
+// player.continueFight() // 5
+// player.continueFight() // 6
 // player.continueFight()
 
 //player.establishCurrentStats()
@@ -371,4 +478,4 @@ player.continueFight() // 6
 
 // console.log(currASStats)
 // console.log(currASStats.name)
-//? ────────────────────────────────────────────────────────────────────────────────
+//* !SECTION ────────────────────────────────────────────────────────────────────────────────
