@@ -9,51 +9,13 @@
 
 console.log("working")
 
-
-//
-//* ───SECTION GLOBAL VARIABLES ───────────────────────────────────────────────────────────
-//
-
-let playerShipStats = {}
-let alienShipStats = {}
-let currPSStats = {}
-let currASStats = {}
-//? ────────────────────────────────────────────────────────────────────────────────
-
-
-//
-//* ───SECTION GLOBAL FUNCTIONS ───────────────────────────────────────────────────────────
-//
-
-
-let establishCurrentStats = () => {
-    //currPSStats = Object.entries(playerShipStats)
-    currPSStats = Object.assign({}, playerShipStats);
-    currASStats = Object.assign({}, alienShipStats);
-}
-let establishCurrentALienStats = () => {
-    currASStats = Object.assign({}, alienShipStats); //new Map(Object.entries(alienShipStats))
-}
-let establishCurrentPlayerStats = () => {
-    currASStats = Object.assign({}, playerShipStats); //new Map(Object.entries(alienShipStats))
-}
-
-
-let gameStart = () => {
-
-
-
-
-}
-//? ────────────────────────────────────────────────────────────────────────────────
-
-
 //
 //* ─── SECTION SHIP METHODS ───────────────────────────────────────────────────────
 //
 
-
 class Ship {
+    scoutIndex = 0;
+
 
 
     fight() {
@@ -117,14 +79,21 @@ class Ship {
     }
 
     startFight() {
-        let alien_1 = new AlienShip("rathaus")
-        alien_1.xatteoScout()
+        // let alienShipObj = new AlienShip()
+        // console.log(alienShipObj.scoutShipObjArray[this.scoutInd]) 
+        globalAlienObj.setAlienShipStats(globalAlienObj.scoutShipObjArray[this.scoutIndex])
+        
+        // alienShipObj.setAlienShipStats(tempObj)
         establishCurrentStats()
+        this.scoutIndex++
         this.fight()
 
+        //! return alien object
     }
-    continueFight() {
+    continueFight() { //! place the function in continue then use the object to call another alien
+        globalAlienObj.setAlienShipStats(globalAlienObj.scoutShipObjArray[this.scoutIndex])
         establishCurrentALienStats()
+        this.scoutIndex++
         this.fight()
     }
     // xatteoScout() {
@@ -202,24 +171,95 @@ class AlienShip extends Ship {
     //alienShipStats = this.currASStats
 
 
-    constructor(name) {
+    constructor() {
         super();
-        this.name = name
+        // this.name = name
     }
 
-    xatteoScout() {
-        alienShipStats = {
-            name: this.name,
+    //* Create array of alien scoutShip Models
+    scoutShipObjArray = [{
+
+            // xatteoScout() {
+            // alienShipStats = {
+            name: "Rathlus",
             hull: this.randRangeNum(6, 3),
             firepower: this.randRangeNum(4, 2),
             barrier: 0,
             accuracy: this.randRangeDouble(.8, .6)
+            //}
+            // }
+        },
+        {
+            // xatteoScout_Klaok() {
+            // alienShipStats = {
+            name: "Klaok",
+            hull: this.randRangeNum(6, 3),
+            firepower: this.randRangeNum(4, 2),
+            barrier: 0,
+            accuracy: this.randRangeDouble(.8, .6)
+            // }
+            // }
+        },
+        {
+            // xatteoScout_Neleux() {
+            // alienShipStats = {
+            name: "Neleux",
+            hull: this.randRangeNum(6, 3),
+            firepower: this.randRangeNum(4, 2),
+            barrier: 0,
+            accuracy: this.randRangeDouble(.8, .6)
+            // }
+            // }
+        },
+        {
+            // xatteoScout_Abkloren() {
+            // alienShipStats = {
+            name: "Abkloren",
+            hull: this.randRangeNum(6, 3),
+            firepower: this.randRangeNum(4, 2),
+            barrier: 0,
+            accuracy: this.randRangeDouble(.8, .6)
+            // }
+            // }
+        },
+        {
+            // xatteoScout_Grotin() {
+            // alienShipStats = {
+            name: "Grotin",
+            hull: this.randRangeNum(6, 3),
+            firepower: this.randRangeNum(4, 2),
+            barrier: 0,
+            accuracy: this.randRangeDouble(.8, .6)
+            //}
+            // }
+        },
+        {
+            // xatteoScout_Spaalorn() {
+            // alienShipStats = {
+            name: "Spaalorn",
+            hull: this.randRangeNum(6, 3),
+            firepower: this.randRangeNum(4, 2),
+            barrier: 0,
+            accuracy: this.randRangeDouble(.8, .6)
+            //  }
+            // }
+        },
+        {
+            // xatteoScout_Blarm() {
+            // alienShipStats = {
+            name: "Blarm",
+            hull: this.randRangeNum(6, 3),
+            firepower: this.randRangeNum(4, 2),
+            barrier: 0,
+            accuracy: this.randRangeDouble(.8, .6)
+            // }
+            // }
         }
+    ]
+
+    setAlienShipStats(obj) {
+        alienShipStats = obj 
     }
-
-    
-
-
     getAlienShipHull() {
         return this.alienShipStats.health
     }
@@ -241,24 +281,73 @@ class AlienShip extends Ship {
 
 
 //
+
+
+//
+//* ───SECTION GLOBAL VARIABLES ───────────────────────────────────────────────────────────
+//
+
+let playerShipStats = {}
+let alienShipStats = {}
+let currPSStats = {}
+let currASStats = {}
+let globalAlienObj = new AlienShip();
+let player = new PlayerShip("Wiley")
+//? ────────────────────────────────────────────────────────────────────────────────
+
+
+//
+//* ───SECTION GLOBAL FUNCTIONS ───────────────────────────────────────────────────────────
+//
+
+
+let establishCurrentStats = () => {
+    //currPSStats = Object.entries(playerShipStats)
+    currPSStats = Object.assign({}, playerShipStats);
+    currASStats = Object.assign({}, alienShipStats);
+}
+let establishCurrentALienStats = () => {
+    currASStats = Object.assign({}, alienShipStats); //new Map(Object.entries(alienShipStats))
+}
+let establishCurrentPlayerStats = () => {
+    currASStats = Object.assign({}, playerShipStats); //new Map(Object.entries(alienShipStats))
+}
+
+
+let gameStart = () => {
+
+
+
+
+}
+//? ────────────────────────────────────────────────────────────────────────────────
+
+
+
 //* ───SECTION FUNCTION CALLS ─────────────────────────────────────────────────────────────
 //
-let player = new PlayerShip("Wiley")
+//let player = new PlayerShip("Wiley")
 player.ussSchwarzenegger()
 
-// let alien_1 = new AlienShip("rathaus")
-// alien_1.xatteoScout()
+// let alienShipObj = new AlienShip("rathaus")
+// alienShipObj.xatteoScout()
 
-// console.log(alien_1.getHealth())
-//console.log(alien_1)
-// console.log(alien_1.alienShipStats) // works
-// console.log(alien_1.currASStats)
-// console.log(alien_1.alienShipStats_2)
+// console.log(alienShipObj.getHealth())
+//console.log(alienShipObj)
+// console.log(alienShipObj.alienShipStats) // works
+// console.log(alienShipObj.currASStats)
+// console.log(alienShipObj.alienShipStats_2)
 
 // establishCurrentStats()
-// alien_1.fight()
-// alien_1.startFight()
-player.startFight()
+// alienShipObj.fight()
+// alienShipObj.startFight()
+player.startFight() // 1
+player.continueFight() // 2 
+player.continueFight() // 3
+player.continueFight() // 4
+player.continueFight() // 5
+player.continueFight() // 6
+// player.continueFight()
 
 //player.establishCurrentStats()
 // console.log(alienShipStats)
@@ -267,13 +356,13 @@ player.startFight()
 // console.log(currPSStats)
 
 // establishCurrentStats()
-// alien_1.fight()
+// alienShipObj.fight()
 
 // establishCurrentALienStats()
-// alien_1.fight()
-// alien_1.continueFight()
-// alien_1.continueFight()
- player.continueFight()
+// alienShipObj.fight()
+// alienShipObj.continueFight()
+// alienShipObj.continueFight()
+
 
 
 
