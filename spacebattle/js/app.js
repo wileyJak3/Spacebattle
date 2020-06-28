@@ -24,44 +24,72 @@ class Ship {
     //? ────────────────────────────────────────────────────────────────────────────────
 
     fight() {
+        //! Can put alien ship name approaches here
         // let PS_hull = this.playerShipStats.hull 
         // let AS_hull = this.alienShipStats.hull
         // let PS_AC = this.playerShipStats.accuracy
         // let PS_firepower = this.playerShipStats.firepower
         let loopEnd = 0;
+        // console.log(currASStats)
+        // alert(printObject(currASStats))
+        // console.log(currPSStats)
+        // alert(printObject(currPSStats))
+
         while (loopEnd == 0) {
 
             //~ FIXME create a separate function for player attack and alien attack 
 
             //? Player attacks 
-            if (Math.random() < currPSStats.accuracy) {
+                let randAtkValPlayer = Math.random()
+            if (randAtkValPlayer <= currPSStats.accuracy) {
                 currASStats.hull = currASStats.hull - currPSStats.firepower;
+                //~ ==============================================================================
                 console.log(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
+                alert(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
+                //~ ==============================================================================
                 loopEnd = this.checkHealth()
                 if (loopEnd == 1) {
-                    break
+                    return loopEnd
                 }
 
+                //~ ==============================================================================
                 console.log(currASStats)
-                console.log(currPSStats)
+                alert(printObject(currASStats))
+                // console.log(currPSStats)
+                // alert(printObject(currPSStats))
+                //~ ==============================================================================
             } else {
+                //~ ==============================================================================
                 console.log(`${currPSStats.name} misses attack`)
-
+                alert(`${currPSStats.name} misses attack`)
+                //~ ==============================================================================
             }
 
-            //? Alien attacks 
-            if (Math.random() < currASStats.accuracy) {
+            //? Alien attacks
+            let randAtkValAlien = Math.random() 
+            if (randAtkValAlien < currASStats.accuracy) {
                 currPSStats.hull = currPSStats.hull - currASStats.firepower
+                //~ ==============================================================================
                 console.log(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
+                alert(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
+                //~ ==============================================================================
                 loopEnd = this.checkHealth()
-                if (loopEnd == 1) {
-                    break
+
+                if (loopEnd == 2) {
+                    return loopEnd
                 }
 
-                console.log(currASStats)
+                //~ ==============================================================================
+                // console.log(currASStats)
+                // alert(printObject(currASStats))
                 console.log(currPSStats)
+                alert(printObject(currPSStats))
+                //~ ==============================================================================
             } else {
+                //~ ==============================================================================
                 console.log(`${currASStats.name} misses attack`)
+                alert(`${currASStats.name} misses attack`)
+                //~ ==============================================================================
 
 
             }
@@ -82,12 +110,18 @@ class Ship {
 
         //~If alien ship destroyed ends the loop
         if (currASStats.hull <= 0) {
+            //~ ==============================================================================
             console.log(`${currASStats.name} hull integrity is 0, ${currASStats.name} ship is destroyed`)
+            alert(`${currASStats.name} hull integrity is 0, ${currASStats.name} ship is destroyed`)
+            //~ ==============================================================================
             return 1;
         }
         //~If player ship destroyed ends the loop
         if (currPSStats.hull <= 0) {
+            //~ ==============================================================================
             console.log(`${currPSStats.name} health is 0, ${currPSStats.name} ship is destroyed`)
+            alert(`${currPSStats.name} health is 0, ${currPSStats.name} ship is destroyed`)
+            //~ ==============================================================================
             return 2
         }
         return 0;
@@ -124,7 +158,7 @@ class Ship {
         globalAlienObj.setAlienShipStats(globalAlienObj.scoutShipObjArray[this.scoutIndex])
         establishCurrentALienStats()
         this.scoutIndex++
-        this.fight()
+        // this.fight()
         return this.fight()
     }
     // xatteoScout() {
@@ -144,24 +178,36 @@ class Ship {
     //? ────────────────────────────────────────────────────────────────────────────────
 
     retreat(outcomeVal) {
-        if (outcomeVal = 1) {
+
+        if (outcomeVal == 2) {
+            //~ ==============================================================================
+            console.log(`GAME OVER ${player.name}\n ship destroyed, you lose.`)
+            alert(`GAME OVER ${player.name}\n ship destroyed, you lose.`)
+            //~ ==============================================================================
+            return 2;
+        }
+        if (outcomeVal == 1) {
             if (this.scoutIndex == 5) {
-                console.log("Feet destroyed, you win")
+                //~ ==============================================================================
+                console.log("Fleet destroyed, you win")
+                alert("Fleet destroyed, you win")
+                //~ ==============================================================================
                 return 0
             }
-            // TODO let userResponse = prompt("retreat (Y/N)? ")
-            let userResponse = "no"
+            //~ ==============================================================================
+            let userResponse = prompt("retreat (Y/N)? ") //NOTE Prompt
+            // let userResponse = "no"
+            //~ ==============================================================================
             // NOTE verification, so only correct input entered
             if ((userResponse.toUpperCase() == "YES") || (userResponse.toUpperCase() == "Y")) {
-                    
+                //~ ==============================================================================
                 console.log(`\n${player.name} retreats\n`)
+                alert(`\n${player.name} retreats\n`)
+                //~ ==============================================================================
                 return 1;
             } else if ((userResponse.toUpperCase() == "NO") || (userResponse.toUpperCase() == "N")) {
                 this.retreat(this.continueFight())
             }
-        } else if (outcomeVal = 2) {
-            console.log(`GAME OVER ${player.name}/n ship destroyed, you lose.`)
-            return 2;
         }
     }
 
@@ -170,8 +216,10 @@ class Ship {
     //? ────────────────────────────────────────────────────────────────────────────────
 
     playAgain() {
-        // TODO let userResponse = prompt("Play again (Y/N)? ")
-        let userResponse = "no"
+        //~ ==============================================================================
+        let userResponse = prompt("Play again (Y/N)? ") // TODO Prompt 2
+        // let userResponse = "no"
+        //~ ==============================================================================
         if ((userResponse.toUpperCase() == "YES") || (userResponse.toUpperCase == "Y")) {
             globalAlienObj.scoutIndex = 0
             return 1;
@@ -187,7 +235,10 @@ class Ship {
     runGame() {
         while (true) {
             let gameOutcomeVal = this.retreat(this.startFight())
-            if (this.playAgain() != 1) {
+            if (this.playAgain() == 1) {
+                globalAlienObj.scoutIndex = 0
+                this.runGame()
+            }else{
                 break
             }
         }
@@ -418,13 +469,13 @@ let establishCurrentPlayerStats = () => {
     currASStats = Object.assign({}, playerShipStats); //new Map(Object.entries(alienShipStats))
 }
 
-
-let gameStart = () => {
-
-
-
-
+let printObject = (obj) => {
+    // str = JSON.stringify(obj);
+    objStr = JSON.stringify(obj, null, 1); // (Optional) beautiful indented output.
+    //console.log(JSON.stringify(obj, null, 4)); // Logs output to dev tools console.
+    return objStr
 }
+
 //* !SECTION ────────────────────────────────────────────────────────────────────────────────
 
 
