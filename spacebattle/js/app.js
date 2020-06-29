@@ -13,9 +13,11 @@
 //^ (2) Scientists have developed a super targeting computer for your lasers. You now are asked which of the aliens you would like to hit with your lasers. 
 //! Randomize names in the future
 
-//~ (3) Scientists have improved your ship's shields. They don't work that consistently, and only improve your hit points by a random number each time 
+//^ (3) Scientists have improved your ship's shields. They don't work that consistently, and only improve your hit points by a random number each time 
+//! Add shields for aliens when other bonus added
 
-//~ (4) Scientists have put missiles on your ship. You only have a limited number of them, but they do a lot of damage. You can say before each battle if you want to use one of your missles. 
+//^ (4) Scientists have put missiles on your ship. You only have a limited number of them, but they do a lot of damage. You can say before each battle if you want to use one of your missles. 
+//! Randomized the number of missiles to be more gamey
 
 //~ (5) The aliens have gained emotions and now can attack more than one at a time.
 
@@ -57,6 +59,7 @@ class Ship {
         // let PS_AC = this.playerShipStats.accuracy
         // let PS_firepower = this.playerShipStats.firepower
         let loopEnd = 0;
+        let missileChoice;
         // console.log(currASStats)
         // alert(printObject(currASStats))
         // console.log(currPSStats)
@@ -68,7 +71,39 @@ class Ship {
 
             //? Player attacks 
             let randAtkValPlayer = Math.random()
-            if (randAtkValPlayer <= currPSStats.accuracy) {
+            if (currPSStats.missile > 0) {
+                missileChoice = prompt(`(${currPSStats.missile}) available\nFire missile?`)
+                if ((missileChoice.toUpperCase() == "YES") || (missileChoice.toUpperCase() == "Y")) {
+                    //~ ==============================================================================
+                    console.log("missile primed")
+                    alert("missile primed")
+                    //~ ==============================================================================
+                    currPSStats.missile--
+                    missileChoice = 1
+                } 
+                // else if ((missileChoice.toUpperCase() == "NO") || (missileChoice.toUpperCase() == "N")) {
+                //     missileChoice = 0;
+                // }
+
+            }
+            if (randAtkValPlayer <= currPSStats.accuracy && missileChoice == 1) {
+                currASStats.hull = currASStats.hull - currPSStats.missileFirepower;
+                //~ ==============================================================================
+                console.log(`The missile detonates hitting ${currASStats.name}  for ${currPSStats.missileFirepower}`)
+                //!alert(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
+                //~ ==============================================================================
+                loopEnd = this.checkHealth()
+                if (loopEnd == 1) {
+                    return loopEnd
+                }
+
+                //~ ==============================================================================
+                console.log(currASStats)
+                //!alert(printObject(currASStats))
+                // console.log(currPSStats)
+                // alert(printObject(currPSStats))
+                //~ ==============================================================================
+            } else if (randAtkValPlayer <= currPSStats.accuracy) {
                 currASStats.hull = currASStats.hull - currPSStats.firepower;
                 //~ ==============================================================================
                 console.log(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
@@ -95,11 +130,22 @@ class Ship {
             //? Alien attacks
             let randAtkValAlien = Math.random()
             if (randAtkValAlien < currASStats.accuracy) {
-                currPSStats.hull = currPSStats.hull - currASStats.firepower
-                //~ ==============================================================================
-                console.log(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
-                //!alert(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
-                //~ ==============================================================================
+                if (currPSStats.barrier <= 0) {
+                    currPSStats.hull = currPSStats.hull - currASStats.firepower
+                    //~ ==============================================================================
+                    console.log(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
+                    //!alert(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
+                    //~ ==============================================================================
+                } else {
+                    currPSStats.barrier = currPSStats.barrier - currASStats.firepower
+                    //~ ==============================================================================
+                    console.log(`${currPSStats.name}'s shields has hit for ${currASStats.firepower}`)
+                    //!alert(`${currPSStats.name}'s shields has hit for  ${currASStats.firepower}`)
+                    //~ ==============================================================================
+                    if (currPSStats.barrier <= 0) {
+                        console.log(`${currPSStats.name}'s shields are down`)
+                    }
+                }
                 loopEnd = this.checkHealth()
 
                 if (loopEnd == 2) {
@@ -383,8 +429,10 @@ class PlayerShip extends Ship {
             name: this.name,
             hull: 20,
             firepower: 3,
-            barrier: 50,
-            accuracy: .7
+            barrier: this.randRangeNum(10, 0),
+            accuracy: .7,
+            missile:this.randRangeNum(3, 0),
+            missileFirepower:6
         }
     }
 
