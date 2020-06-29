@@ -71,7 +71,7 @@ class Ship {
 
             //? Player attacks 
             let randAtkValPlayer = Math.random()
-            if (currPSStats.missile > 0) {
+            if (currPSStats.missile > 0 && bonusMode == true) {
                 missileChoice = prompt(`(${currPSStats.missile}) available\nFire missile?`)
                 if ((missileChoice.toUpperCase() == "YES") || (missileChoice.toUpperCase() == "Y")) {
                     //~ ==============================================================================
@@ -86,11 +86,11 @@ class Ship {
                 // }
 
             }
-            if (randAtkValPlayer <= currPSStats.accuracy && missileChoice == 1) {
+            if (randAtkValPlayer <= currPSStats.accuracy && missileChoice == 1 ) {
                 currASStats.hull = currASStats.hull - currPSStats.missileFirepower;
                 //~ ==============================================================================
                 console.log(`The missile detonates hitting ${currASStats.name}  for ${currPSStats.missileFirepower}`)
-                //!alert(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
+                alert(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
                 //~ ==============================================================================
                 loopEnd = this.checkHealth()
                 if (loopEnd == 1) {
@@ -99,7 +99,7 @@ class Ship {
 
                 //~ ==============================================================================
                 console.log(currASStats)
-                //!alert(printObject(currASStats))
+                alert(printObject(currASStats))
                 // console.log(currPSStats)
                 // alert(printObject(currPSStats))
                 //~ ==============================================================================
@@ -107,7 +107,7 @@ class Ship {
                 currASStats.hull = currASStats.hull - currPSStats.firepower;
                 //~ ==============================================================================
                 console.log(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
-                //!alert(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
+                alert(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
                 //~ ==============================================================================
                 loopEnd = this.checkHealth()
                 if (loopEnd == 1) {
@@ -116,31 +116,31 @@ class Ship {
 
                 //~ ==============================================================================
                 console.log(currASStats)
-                //!alert(printObject(currASStats))
+                alert(printObject(currASStats))
                 // console.log(currPSStats)
                 // alert(printObject(currPSStats))
                 //~ ==============================================================================
             } else {
                 //~ ==============================================================================
                 console.log(`${currPSStats.name} misses attack`)
-                //!alert(`${currPSStats.name} misses attack`)
+                alert(`${currPSStats.name} misses attack`)
                 //~ ==============================================================================
             }
 
             //? Alien attacks
             let randAtkValAlien = Math.random()
             if (randAtkValAlien < currASStats.accuracy) {
-                if (currPSStats.barrier <= 0) {
+                if (currPSStats.barrier <= 0 || bonusMode == false) {
                     currPSStats.hull = currPSStats.hull - currASStats.firepower
                     //~ ==============================================================================
                     console.log(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
-                    //!alert(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
+                    alert(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
                     //~ ==============================================================================
-                } else {
+                } else if( bonusMode == true && currPSStats.barrier > 0) {
                     currPSStats.barrier = currPSStats.barrier - currASStats.firepower
                     //~ ==============================================================================
                     console.log(`${currPSStats.name}'s shields has hit for ${currASStats.firepower}`)
-                    //!alert(`${currPSStats.name}'s shields has hit for  ${currASStats.firepower}`)
+                    alert(`${currPSStats.name}'s shields has hit for  ${currASStats.firepower}`)
                     //~ ==============================================================================
                     if (currPSStats.barrier <= 0) {
                         console.log(`${currPSStats.name}'s shields are down`)
@@ -156,12 +156,12 @@ class Ship {
                 // console.log(currASStats)
                 // alert(printObject(currASStats))
                 console.log(currPSStats)
-                //!alert(printObject(currPSStats))
+                alert(printObject(currPSStats))
                 //~ ==============================================================================
             } else {
                 //~ ==============================================================================
                 console.log(`${currASStats.name} misses attack`)
-                //!alert(`${currASStats.name} misses attack`)
+                alert(`${currASStats.name} misses attack`)
                 //~ ==============================================================================
 
 
@@ -185,7 +185,7 @@ class Ship {
         if (currASStats.hull <= 0) {
             //~ ==============================================================================
             console.log(`${currASStats.name} hull integrity is 0, ${currASStats.name} ship is destroyed`)
-            //!alert(`${currASStats.name} hull integrity is 0, ${currASStats.name} ship is destroyed`)
+            alert(`${currASStats.name} hull integrity is 0, ${currASStats.name} ship is destroyed`)
             //~ ==============================================================================
             if (bonusMode) {
                 globalAlienObj.scoutShipObjArray[currGlobalIndex].alive = 0;
@@ -196,7 +196,7 @@ class Ship {
         if (currPSStats.hull <= 0) {
             //~ ==============================================================================
             console.log(`${currPSStats.name} health is 0, ${currPSStats.name} ship is destroyed`)
-            //!alert(`${currPSStats.name} health is 0, ${currPSStats.name} ship is destroyed`)
+            alert(`${currPSStats.name} health is 0, ${currPSStats.name} ship is destroyed`)
             //~ ==============================================================================
 
             return 2
@@ -233,7 +233,7 @@ class Ship {
         } else {
             console.log('No alien ships remain`')
         }
-        let alienTarget = prompt(`${alienAliveArr}\nSelect Target:`)
+        let alienTarget = prompt(`${alienAliveArr}\nSelect Target(Case/Space sensitive):`)
         // let alienTarget = "Neleux";
 
         let alienInd = globalAlienObj.scoutShipObjArray.findIndex(scoutObj =>
@@ -305,8 +305,8 @@ class Ship {
 
         if (outcomeVal == 2) {
             //~ ==============================================================================
-            console.log(`GAME OVER ${player.name}\n ship destroyed, you lose.`)
-            //!alert(`GAME OVER ${player.name}\n ship destroyed, you lose.`)
+            console.log
+            (`GAME OVER!!! ${player.name}\nShip destroyed, you lose.`)
             //~ ==============================================================================
             return 2;
         }
@@ -317,19 +317,19 @@ class Ship {
             if (this.scoutShipsDestroyed == numOfAliens) {
                 //~ ==============================================================================
                 console.log("Fleet destroyed, you win")
-                //!alert("Fleet destroyed, you win")
+                alert("Fleet destroyed, you win")
                 //~ ==============================================================================
                 return 0
             }
             //~ ==============================================================================
-            //!let userResponse = prompt("retreat (Y/N)? ") //NOTE Prompt
-            let userResponse = "no"
+            let userResponse = prompt("retreat (Y/N)? ") //NOTE Prompt
+            //let userResponse = "no"
             //~ ==============================================================================
             // NOTE verification, so only correct input entered
             if ((userResponse.toUpperCase() == "YES") || (userResponse.toUpperCase() == "Y")) {
                 //~ ==============================================================================
                 console.log(`\n${player.name} retreats\n`)
-                //!alert(`\n${player.name} retreats\n`)
+                alert(`\n${player.name} retreats\n`)
                 //~ ==============================================================================
                 return 1;
             } else if ((userResponse.toUpperCase() == "NO") || (userResponse.toUpperCase() == "N")) {
@@ -344,8 +344,8 @@ class Ship {
 
     playAgain() {
         //~ ==============================================================================
-        //! let userResponse = prompt("Play again (Y/N)? ") // TODO Prompt 2
-        let userResponse = "no"
+        let userResponse = prompt("Play again (Y/N)? ") //  
+        //let userResponse = "no"
         //~ ==============================================================================
         if ((userResponse.toUpperCase() == "YES") || (userResponse.toUpperCase() == "Y")) {
             globalAlienObj.scoutShipsDestroyed = 0
@@ -360,13 +360,14 @@ class Ship {
     //? ────────────────────────────────────────────────────────────────────────────────
 
     runGame() {
-        while (true) {
+        let gameRunVar = 0
+        while (gameRunVar == 0) {
             let gameOutcomeVal = this.retreat(this.startFight())
             if (this.playAgain() == 1) {
                 globalAlienObj.scoutShipsDestroyed = 0
                 this.runGame()
             } else {
-                break
+                gameRunVar++
             }
         }
 
@@ -580,20 +581,20 @@ class AlienShip extends Ship {
 //* ───SECTION GLOBAL VARIABLE FUNCTIONS ───────────────────────────────────────────────────────────
 let activateBonusMode = () => {
     //~ ==============================================================================
-    //! let bonusMode = prompt("Bonus Mode?");
-    let bonusMode = "yes"
+    let bonusMode = prompt("Bonus Mode?");
+    //let bonusMode = "yes"
     //~ ==============================================================================
 
     if ((bonusMode.toUpperCase() == "YES") || (bonusMode.toUpperCase() == "Y")) {
         //~ ==============================================================================
         console.log(`Bonus mode: Enabled`);
-        //!alert(`Bonus mode: Enabled`);
+        alert(`Bonus mode: Enabled`);
         //~ ==============================================================================
         return true;
     } else if ((bonusMode.toUpperCase() == "NO") || (bonusMode.toUpperCase() == "N")) {
         //~ ==============================================================================
         console.log(`Bonus mode: Disabled`);
-        //!alert(`Bonus mode: Disabled`);
+        alert(`Bonus mode: Disabled`);
         //~ ==============================================================================
         return false;
     }
@@ -604,7 +605,7 @@ let activateBonusMode = () => {
 
 
 let globalAlienObj = new AlienShip();
-let player = new PlayerShip("Wiley")
+let player = new PlayerShip(prompt("Ship name?"))
 let playerShipStats = {}
 let alienShipStats = {}
 let currPSStats = {}
@@ -613,6 +614,8 @@ let currASStats = {}
 let bonusMode = activateBonusMode()
 let currGlobalIndex;
 let numOfAliens = ((bonusMode) ? globalAlienObj.randRangeNum(5, 2) : 5)
+let alienEmotion = .5
+let alienReinforcements = globalAlienObj.randRangeNum(2,0)
 
 
 //* !SECTION ────────────────────────────────────────────────────────────────────────────────
