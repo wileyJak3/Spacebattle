@@ -7,28 +7,30 @@
 
 //~ Bonuses
 
-//~ (1) The aliens send a random number of ships to attack Earth. Think of a reasonable range and implement it. 
+//^ (1) The aliens send a random number of ships to attack Earth. Think of a reasonable range and implement it. 
+//! Functional, but hardcoded. marked by "FIXME", softcode in the future
 
-//~ (2) Scientists have developed a super targeting computer for your lasers. You now are asked which of the aliens you would like to hit with your lasers. 
+//^ (2) Scientists have developed a super targeting computer for your lasers. You now are asked which of the aliens you would like to hit with your lasers. 
+//! Randomize names in the future
 
 //~ (3) Scientists have improved your ship's shields. They don't work that consistently, and only improve your hit points by a random number each time 
 
-//~ (4) Scientists have put missiles on your ship. You only have a limited number of them, but they do a lot of damage.
+//~ (4) Scientists have put missiles on your ship. You only have a limited number of them, but they do a lot of damage. You can say before each battle if you want to use one of your missles. 
 
-//~ (5) You can say before each battle if you want to use one of your missles. 
+//~ (5) The aliens have gained emotions and now can attack more than one at a time.
 
-//~ (6) The aliens have gained emotions and now can attack more than one at a time.
-
-//~ (7) Evil alien scientists have created an alien mega-ship. This mega-ship contains a number of "weapon pods" that each have their own individual hit points. These "weapon-pods" ( objects ) must all be destroyed before you can begin doing damage to the main ship, which also has its own hit points.
+//~ (6) Evil alien scientists have created an alien mega-ship. This mega-ship contains a number of
+//~  "weapon pods" that each have their own individual hit points.These "weapon-pods"(objects) must all 
+//~  be destroyed before you can begin doing damage to the main ship, which also has its own hit points.
 
 //? Bonus Bonus
 //^ (1) When the game is over, prompt the user if they would like to play again, and make it so the user can play again with all the values set back to default. 
 
 //? (2) So far the entire game is just one battle, with many aliens. implement a game that consists of multiple battles where enemies respawn for a new battle at the end of the old battle. Keep track of points for the number of wins the player has.
 
-    //? (2.1) After every battle you are asked if you want to return to base and recharge your shields. 
+//? (2.1) After every battle you are asked if you want to return to base and recharge your shields. 
 
-    //? (2.2) Make the players and enemies stronger after each battle * Distribute medals and power ups to the player depending on points
+//? (2.2) Make the players and enemies stronger after each battle * Distribute medals and power ups to the player depending on points
 
 
 //? ────────────────────────────────────────────────────────────────────────────────
@@ -41,7 +43,7 @@ console.log("working")
 //
 
 class Ship {
-    scoutIndex = 0;
+    scoutShipsDestroyed = 0;
 
     //
     //? ─── FIGHT FUNCTION ─────────────────────────────────────────────────────────────
@@ -65,12 +67,12 @@ class Ship {
             //~ FIXME create a separate function for player attack and alien attack 
 
             //? Player attacks 
-                let randAtkValPlayer = Math.random()
+            let randAtkValPlayer = Math.random()
             if (randAtkValPlayer <= currPSStats.accuracy) {
                 currASStats.hull = currASStats.hull - currPSStats.firepower;
                 //~ ==============================================================================
                 console.log(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
-                alert(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
+                //!alert(`${currASStats.name} has been hit for ${currPSStats.firepower}`)
                 //~ ==============================================================================
                 loopEnd = this.checkHealth()
                 if (loopEnd == 1) {
@@ -79,24 +81,24 @@ class Ship {
 
                 //~ ==============================================================================
                 console.log(currASStats)
-                alert(printObject(currASStats))
+                //!alert(printObject(currASStats))
                 // console.log(currPSStats)
                 // alert(printObject(currPSStats))
                 //~ ==============================================================================
             } else {
                 //~ ==============================================================================
                 console.log(`${currPSStats.name} misses attack`)
-                alert(`${currPSStats.name} misses attack`)
+                //!alert(`${currPSStats.name} misses attack`)
                 //~ ==============================================================================
             }
 
             //? Alien attacks
-            let randAtkValAlien = Math.random() 
+            let randAtkValAlien = Math.random()
             if (randAtkValAlien < currASStats.accuracy) {
                 currPSStats.hull = currPSStats.hull - currASStats.firepower
                 //~ ==============================================================================
                 console.log(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
-                alert(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
+                //!alert(`${currPSStats.name} has been hit for ${currASStats.firepower}`)
                 //~ ==============================================================================
                 loopEnd = this.checkHealth()
 
@@ -108,12 +110,12 @@ class Ship {
                 // console.log(currASStats)
                 // alert(printObject(currASStats))
                 console.log(currPSStats)
-                alert(printObject(currPSStats))
+                //!alert(printObject(currPSStats))
                 //~ ==============================================================================
             } else {
                 //~ ==============================================================================
                 console.log(`${currASStats.name} misses attack`)
-                alert(`${currASStats.name} misses attack`)
+                //!alert(`${currASStats.name} misses attack`)
                 //~ ==============================================================================
 
 
@@ -137,20 +139,71 @@ class Ship {
         if (currASStats.hull <= 0) {
             //~ ==============================================================================
             console.log(`${currASStats.name} hull integrity is 0, ${currASStats.name} ship is destroyed`)
-            alert(`${currASStats.name} hull integrity is 0, ${currASStats.name} ship is destroyed`)
+            //!alert(`${currASStats.name} hull integrity is 0, ${currASStats.name} ship is destroyed`)
             //~ ==============================================================================
+            if (bonusMode) {
+                globalAlienObj.scoutShipObjArray[currGlobalIndex].alive = 0;
+            }
             return 1;
         }
         //~If player ship destroyed ends the loop
         if (currPSStats.hull <= 0) {
             //~ ==============================================================================
             console.log(`${currPSStats.name} health is 0, ${currPSStats.name} ship is destroyed`)
-            alert(`${currPSStats.name} health is 0, ${currPSStats.name} ship is destroyed`)
+            //!alert(`${currPSStats.name} health is 0, ${currPSStats.name} ship is destroyed`)
             //~ ==============================================================================
+
             return 2
         }
         return 0;
     }
+
+    //
+    //? ───FIXME SELECT ALIEN FUNCTION ────────────────────────────────────────────────────────
+    //
+    //? ────────────────────────────────────────────────────────────────────────────────
+
+    alienSelection() {
+        //globalAlienObj.setAlienShipStats(globalAlienObj.scoutShipObjArray[this.scoutShipsDestroyed])
+        // console.log(globalAlienObj.scoutShipObjArray)
+        let alienDestroyedArr = [];
+        let alienAliveArr = [];
+
+
+        for (let i = 0; i < numOfAliens; i++) {
+            let alienShipElement = globalAlienObj.scoutShipObjArray[i]
+            if (alienShipElement.alive == 0) {
+                alienDestroyedArr.push(alienShipElement.name);
+            } else {
+                alienAliveArr.push(alienShipElement.name)
+            }
+        }
+
+        if (alienDestroyedArr.length != 0) {
+            console.log(`Aliens Destroyed: ${alienDestroyedArr}`)
+        }
+        if (alienAliveArr.length != 0) {
+            console.log(`Aliens Remaining: ${alienAliveArr}`)
+        } else {
+            console.log('No alien ships remain`')
+        }
+        let alienTarget = prompt(`${alienAliveArr}\nSelect Target:`)
+        // let alienTarget = "Neleux";
+
+        let alienInd = globalAlienObj.scoutShipObjArray.findIndex(scoutObj =>
+            //console.log(scoutObj.name)
+            scoutObj.name == alienTarget
+
+        )
+        currGlobalIndex = alienInd;
+
+        return alienInd;
+
+    }
+
+
+
+
 
 
 
@@ -163,11 +216,11 @@ class Ship {
         // let alienShipObj = new AlienShip()
         // console.log(alienShipObj.scoutShipObjArray[this.scoutInd]) 
         player.ussSchwarzenegger()
-        globalAlienObj.setAlienShipStats(globalAlienObj.scoutShipObjArray[this.scoutIndex])
+        globalAlienObj.setAlienShipStats(globalAlienObj.scoutShipObjArray[((bonusMode) ? this.alienSelection() : this.scoutShipsDestroyed)])
 
         // alienShipObj.setAlienShipStats(tempObj)
         establishCurrentStats()
-        this.scoutIndex++
+        this.scoutShipsDestroyed++
         // this.fight()
         return this.fight()
 
@@ -180,9 +233,9 @@ class Ship {
     //? ────────────────────────────────────────────────────────────────────────────────
 
     continueFight() { //! place the function in continue then use the object to call another alien
-        globalAlienObj.setAlienShipStats(globalAlienObj.scoutShipObjArray[this.scoutIndex])
+        globalAlienObj.setAlienShipStats(globalAlienObj.scoutShipObjArray[((bonusMode) ? this.alienSelection() : this.scoutShipsDestroyed)])
         establishCurrentALienStats()
-        this.scoutIndex++
+        this.scoutShipsDestroyed++
         // this.fight()
         return this.fight()
     }
@@ -198,7 +251,7 @@ class Ship {
     // }
     //
 
-    //? ───FIXME RETREAT FUNCTION ──────────────────────────────────────────────────────────────
+    //? ─── RETREAT FUNCTION ──────────────────────────────────────────────────────────────
     //
     //? ────────────────────────────────────────────────────────────────────────────────
 
@@ -207,27 +260,30 @@ class Ship {
         if (outcomeVal == 2) {
             //~ ==============================================================================
             console.log(`GAME OVER ${player.name}\n ship destroyed, you lose.`)
-            alert(`GAME OVER ${player.name}\n ship destroyed, you lose.`)
+            //!alert(`GAME OVER ${player.name}\n ship destroyed, you lose.`)
             //~ ==============================================================================
             return 2;
         }
         if (outcomeVal == 1) {
-            if (this.scoutIndex == 5) {
+
+            //! FIXME Index hardcoded, due to code structure would require a lot of work to change
+            // numOfAliens = ((bonusMode) ? this.randRangeNum(2, 5) : 5)
+            if (this.scoutShipsDestroyed == numOfAliens) {
                 //~ ==============================================================================
                 console.log("Fleet destroyed, you win")
-                alert("Fleet destroyed, you win")
+                //!alert("Fleet destroyed, you win")
                 //~ ==============================================================================
                 return 0
             }
             //~ ==============================================================================
-            let userResponse = prompt("retreat (Y/N)? ") //NOTE Prompt
-            // let userResponse = "no"
+            //!let userResponse = prompt("retreat (Y/N)? ") //NOTE Prompt
+            let userResponse = "no"
             //~ ==============================================================================
             // NOTE verification, so only correct input entered
             if ((userResponse.toUpperCase() == "YES") || (userResponse.toUpperCase() == "Y")) {
                 //~ ==============================================================================
                 console.log(`\n${player.name} retreats\n`)
-                alert(`\n${player.name} retreats\n`)
+                //!alert(`\n${player.name} retreats\n`)
                 //~ ==============================================================================
                 return 1;
             } else if ((userResponse.toUpperCase() == "NO") || (userResponse.toUpperCase() == "N")) {
@@ -236,24 +292,24 @@ class Ship {
         }
     }
 
-    //? ───FIXME PLAY AGAIN FUNCTION ──────────────────────────────────────────────────────────────
+    //? ─── PLAY AGAIN FUNCTION ──────────────────────────────────────────────────────────────
     //
     //? ────────────────────────────────────────────────────────────────────────────────
 
     playAgain() {
         //~ ==============================================================================
-        let userResponse = prompt("Play again (Y/N)? ") // TODO Prompt 2
-        // let userResponse = "no"
+        //! let userResponse = prompt("Play again (Y/N)? ") // TODO Prompt 2
+        let userResponse = "no"
         //~ ==============================================================================
         if ((userResponse.toUpperCase() == "YES") || (userResponse.toUpperCase() == "Y")) {
-            globalAlienObj.scoutIndex = 0
+            globalAlienObj.scoutShipsDestroyed = 0
             return 1;
         } else {
             return 0
         }
     }
 
-    //? ───FIXME RUNGAME FUCTION ──────────────────────────────────────────────────────────────
+    //? ─── RUNGAME FUCTION ──────────────────────────────────────────────────────────────
     //
     //? ────────────────────────────────────────────────────────────────────────────────
 
@@ -261,9 +317,9 @@ class Ship {
         while (true) {
             let gameOutcomeVal = this.retreat(this.startFight())
             if (this.playAgain() == 1) {
-                globalAlienObj.scoutIndex = 0
+                globalAlienObj.scoutShipsDestroyed = 0
                 this.runGame()
-            }else{
+            } else {
                 break
             }
         }
@@ -365,7 +421,8 @@ class AlienShip extends Ship {
             hull: this.randRangeNum(6, 3),
             firepower: this.randRangeNum(4, 2),
             barrier: 0,
-            accuracy: this.randRangeDouble(.8, .6)
+            accuracy: this.randRangeDouble(.8, .6),
+            alive: 1
             //}
             // }
         },
@@ -376,7 +433,8 @@ class AlienShip extends Ship {
             hull: this.randRangeNum(6, 3),
             firepower: this.randRangeNum(4, 2),
             barrier: 0,
-            accuracy: this.randRangeDouble(.8, .6)
+            accuracy: this.randRangeDouble(.8, .6),
+            alive: 1
             // }
             // }
         },
@@ -387,7 +445,8 @@ class AlienShip extends Ship {
             hull: this.randRangeNum(6, 3),
             firepower: this.randRangeNum(4, 2),
             barrier: 0,
-            accuracy: this.randRangeDouble(.8, .6)
+            accuracy: this.randRangeDouble(.8, .6),
+            alive: 1
             // }
             // }
         },
@@ -398,7 +457,8 @@ class AlienShip extends Ship {
             hull: this.randRangeNum(6, 3),
             firepower: this.randRangeNum(4, 2),
             barrier: 0,
-            accuracy: this.randRangeDouble(.8, .6)
+            accuracy: this.randRangeDouble(.8, .6),
+            alive: 1
             // }
             // }
         },
@@ -409,7 +469,8 @@ class AlienShip extends Ship {
             hull: this.randRangeNum(6, 3),
             firepower: this.randRangeNum(4, 2),
             barrier: 0,
-            accuracy: this.randRangeDouble(.8, .6)
+            accuracy: this.randRangeDouble(.8, .6),
+            alive: 1
             //}
             // }
         },
@@ -420,7 +481,8 @@ class AlienShip extends Ship {
             hull: this.randRangeNum(6, 3),
             firepower: this.randRangeNum(4, 2),
             barrier: 0,
-            accuracy: this.randRangeDouble(.8, .6)
+            accuracy: this.randRangeDouble(.8, .6),
+            alive: 1
             //  }
             // }
         },
@@ -431,7 +493,8 @@ class AlienShip extends Ship {
             hull: this.randRangeNum(6, 3),
             firepower: this.randRangeNum(4, 2),
             barrier: 0,
-            accuracy: this.randRangeDouble(.8, .6)
+            accuracy: this.randRangeDouble(.8, .6),
+            alive: 1
             // }
             // }
         }
@@ -466,21 +529,49 @@ class AlienShip extends Ship {
 //
 //* ───SECTION GLOBAL VARIABLES ───────────────────────────────────────────────────────────
 //
+//* ───SECTION GLOBAL VARIABLE FUNCTIONS ───────────────────────────────────────────────────────────
+let activateBonusMode = () => {
+    //~ ==============================================================================
+    //! let bonusMode = prompt("Bonus Mode?");
+    let bonusMode = "yes"
+    //~ ==============================================================================
 
+    if ((bonusMode.toUpperCase() == "YES") || (bonusMode.toUpperCase() == "Y")) {
+        //~ ==============================================================================
+        console.log(`Bonus mode: Enabled`);
+        //!alert(`Bonus mode: Enabled`);
+        //~ ==============================================================================
+        return true;
+    } else if ((bonusMode.toUpperCase() == "NO") || (bonusMode.toUpperCase() == "N")) {
+        //~ ==============================================================================
+        console.log(`Bonus mode: Disabled`);
+        //!alert(`Bonus mode: Disabled`);
+        //~ ==============================================================================
+        return false;
+    }
+    //! add verification for improper user input
+}
+
+//* !SECTION ────────────────────────────────────────────────────────────────────────────────
+
+
+let globalAlienObj = new AlienShip();
+let player = new PlayerShip("Wiley")
 let playerShipStats = {}
 let alienShipStats = {}
 let currPSStats = {}
 let currASStats = {}
-let globalAlienObj = new AlienShip();
-let player = new PlayerShip("Wiley")
-let bonusMode = false;
+// let bonusMode = false;
+let bonusMode = activateBonusMode()
+let currGlobalIndex;
+let numOfAliens = ((bonusMode) ? globalAlienObj.randRangeNum(5, 2) : 5)
+
 
 //* !SECTION ────────────────────────────────────────────────────────────────────────────────
 
 
 //
 //* ───SECTION GLOBAL FUNCTIONS ───────────────────────────────────────────────────────────
-//
 
 
 let establishCurrentStats = () => {
