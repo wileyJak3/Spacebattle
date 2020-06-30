@@ -1,4 +1,5 @@
 # Space Battle
+https://wileyjak3.github.io/Spacebattle/
 
 ## Description:
 
@@ -26,6 +27,6 @@
 ## Technology: Javascript
   
 ## Credits:
-Wiley Jackson III 
+Wiley Jackson III (https://github.com/wileyJak3)
 
 
