@@ -49,7 +49,10 @@ class Ship {
 
     //
     //? ─── FIGHT FUNCTION ─────────────────────────────────────────────────────────────
-    //
+    // The fight method uses the current player ship stats (currPSStats) and the current alien currASS to 
+    // to assign the battle values the alien ship and player ship. The method also determines checks to see if 
+    // "bonus mode" is activated to determine  if the player is allowed to use missiles or shields.The method 
+    // returns a 1 if the alien ship is destroyed and a 2 if the player ship is destroyed 
     //? ────────────────────────────────────────────────────────────────────────────────
 
     fight() {
@@ -175,7 +178,9 @@ class Ship {
 
     //
     //? ─── CHECK HEALTH FUNCTION ────────────────────────────────────────────────────────
-    //
+    // The check health function check if the alien or players health is equal to 0 and returns
+    //  1 if alien ship is destroyed and 2 if player ship is destroyed. If bonus mode is activated
+    //   the method also sets ship status equal to 0 (To show ship destroyed)
     //? ────────────────────────────────────────────────────────────────────────────────
 
 
@@ -205,8 +210,8 @@ class Ship {
     }
 
     //
-    //? ───FIXME SELECT ALIEN FUNCTION ────────────────────────────────────────────────────────
-    //
+    //? ───NOTE SELECT ALIEN FUNCTION ────────────────────────────────────────────────────────
+    //      The Alien selection method is a  bonus mode feature that allows players to choose an alien target
     //? ────────────────────────────────────────────────────────────────────────────────
 
     alienSelection() {
@@ -255,7 +260,7 @@ class Ship {
 
     //
     //? ─── START FIGHT FUNCTION ────────────────────────────────────────────────────────
-    //
+    // The start fight function assigns the initial stats for the player/alien ship and increments the ships destroyed
     //? ────────────────────────────────────────────────────────────────────────────────
 
     startFight() {
@@ -275,7 +280,7 @@ class Ship {
 
     //
     //? ─── CONTINUE FIGHT FUNCTION ──────────────────────────────────────────────────────────────
-    //
+    // The start fight function assigns the stats for the current alien ship and increments the ships destroyed
     //? ────────────────────────────────────────────────────────────────────────────────
 
     continueFight() { //! place the function in continue then use the object to call another alien
@@ -298,7 +303,9 @@ class Ship {
     //
 
     //? ─── RETREAT FUNCTION ──────────────────────────────────────────────────────────────
-    //
+    //   The retreat function checks if the player has been killed, if the player has defeated
+    //  all the aliens, and prompts the player to choose if he would like to retreat. If the player 
+    //  chooses  to retreat the game is over, otherwise the game continues
     //? ────────────────────────────────────────────────────────────────────────────────
 
     retreat(outcomeVal) {
@@ -339,7 +346,7 @@ class Ship {
     }
 
     //? ─── PLAY AGAIN FUNCTION ──────────────────────────────────────────────────────────────
-    //
+    //  Ask the player if he would like to play the game again. If the player chooses yes, resets the ships destroyed
     //? ────────────────────────────────────────────────────────────────────────────────
 
     playAgain() {
@@ -356,7 +363,8 @@ class Ship {
     }
 
     //? ─── RUNGAME FUCTION ──────────────────────────────────────────────────────────────
-    //
+    // The rungame method starts the game and calls all of the other methods. The function will
+    //  continue if the player chooses to play again or if the player dies,retreats, or wins
     //? ────────────────────────────────────────────────────────────────────────────────
 
     runGame() {
@@ -384,7 +392,7 @@ class Ship {
 
     //
     //? ─── RANDOM RANGE NUMBER FUNCTION ──────────────────────────────────────────────────────────────
-    //
+    // returns a random number between the givin min and max
     //? ────────────────────────────────────────────────────────────────────────────────
 
     randRangeNum(max, min) {
@@ -395,7 +403,7 @@ class Ship {
 
 
     //? ─── RANDOM RANGE DOUBLE  FUNCTION ──────────────────────────────────────────────────────────────
-    //
+    // // returns a random double between the givin min and max
     //? ────────────────────────────────────────────────────────────────────────────────
     randRangeDouble(max, min) {
         let randVal = (Math.random() * ((max - min))).toFixed(2)
@@ -413,7 +421,8 @@ class Ship {
 
 //
 //* ─── SECTION PLAYER SHIP ─────────────────────────────────────────────────────────
-//
+// An extension of the ship class that contains the player ship object
+//* ────────────────────────────────────────────────────────────────────────────────
 
 
 class PlayerShip extends Ship {
@@ -446,7 +455,9 @@ class PlayerShip extends Ship {
 
 //
 //* ─── SECTION ALIEN SHIP METHODS ─────────────────────────────────────────────────────────
-//
+
+// An extension of the ship class that contains the alien ship objects
+//* ────────────────────────────────────────────────────────────────────────────────
 
 //! Create a player ship (health (hull),damage (firepower), Barrier (barrier), & Accuracy (accuracy))
 class AlienShip extends Ship {
@@ -579,6 +590,9 @@ class AlienShip extends Ship {
 //* ───SECTION GLOBAL VARIABLES ───────────────────────────────────────────────────────────
 //
 //* ───SECTION GLOBAL VARIABLE FUNCTIONS ───────────────────────────────────────────────────────────
+
+// The function prompts the user to determine if bonus mode features will be enabled
+//* ────────────────────────────────────────────────────────────────────────────────
 let activateBonusMode = () => {
     //~ ==============================================================================
     let bonusMode = prompt("Bonus Mode?");
@@ -603,6 +617,7 @@ let activateBonusMode = () => {
 
 //* !SECTION ────────────────────────────────────────────────────────────────────────────────
 
+// Global Variables
 
 let globalAlienObj = new AlienShip();
 let player = new PlayerShip(prompt("Ship name?"))
@@ -624,6 +639,7 @@ let alienReinforcements = globalAlienObj.randRangeNum(2,0)
 //
 //* ───SECTION GLOBAL FUNCTIONS ───────────────────────────────────────────────────────────
 
+// The establish functions clone the given object into a new object that is not pass by reference
 
 let establishCurrentStats = () => {
     //currPSStats = Object.entries(playerShipStats)
@@ -636,6 +652,9 @@ let establishCurrentALienStats = () => {
 let establishCurrentPlayerStats = () => {
     currASStats = Object.assign({}, playerShipStats); //new Map(Object.entries(alienShipStats))
 }
+
+
+//Converts objects to a string and returns the created string
 
 let printObject = (obj) => {
     // str = JSON.stringify(obj);
